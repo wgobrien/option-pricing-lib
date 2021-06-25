@@ -28,7 +28,7 @@ class EuropeanOption
 
         void set_params(double r, double sig, double K,  double T, double S, double b);
 
-        // Functions that calculate option price and (some) sensitivities
+        // Functions that calculate option price and (some) sensitivitiesx
 	double price() const;
 
         // Modifier functions
