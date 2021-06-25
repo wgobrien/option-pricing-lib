@@ -1,10 +1,12 @@
 /*
- * EuropeanOption.h
+ * EuropeanOption.hpp
  *
  * Header file for European option pricing program.
  */
-#ifndef __EUROPEAN_OPTION_H
-#define __EUROPEAN_OPTION_H
+#ifndef __EUROPEANOPTION_H
+#define __EUROPEANOPTION_H
+
+#include <string>
 
 class EuropeanOption
 {
@@ -17,22 +19,24 @@ class EuropeanOption
 	double S;    // Underlying asset price
 	double b;    // Cost of carry
 
-        int type; // Option name (call, put)
+        std::string type; // Option name (call, put)
 
-	double callPrice() const;
-	double putPrice() const;
+	double CallPrice() const;
+	double PutPrice() const;
 
     public:
 
-        void init(int type, double r, double sig, double K,  double T, double S, double b);
-
-        //EuropeanOption() {}
+        void set_params(double r, double sig, double K,  double T, double S, double b);
 
         // Functions that calculate option price and (some) sensitivities
 	double price() const;
 
         // Modifier functions
 	void toggle();
+
+        EuropeanOption(std::string t) {
+	    type = t;
+	}
 };
 
 #endif

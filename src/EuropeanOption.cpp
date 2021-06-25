@@ -1,7 +1,10 @@
 #include <cmath>
-#include "EuropeanOption.h"
+#include <iostream>
+#include "EuropeanOption.hpp"
 
-void EuropeanOption::init(int type, double r, double sig, double K,  double T, double S, double b)
+using namespace std;
+
+void EuropeanOption::set_params(double r, double sig, double K,  double T, double S, double b)
 {
     // initialize values
     this->r = r;
@@ -10,52 +13,50 @@ void EuropeanOption::init(int type, double r, double sig, double K,  double T, d
     this->T = T;
     this->S = S;
     this->b = b;
-
-    this->type = type;
 }
 
-double normCDF(double x)
+double norm_CDF(double x)
 {
     // approximate normal cdf distribution
     return 0.5 * erfc(-x * M_SQRT1_2);
 }
 
-double EuropeanOption::callPrice() const
+double EuropeanOption::CallPrice() const
 {
     // European call option price
     double tmp = sig * sqrt(T);
     double d1 = ( log(S/K) + (b + sig*sig)*.5 * T ) / tmp;
     double d2 = d1 - tmp;
 
-    return (S * exp((b-r) * T) * normCDF(-d1)) - (K * exp(-r * T) * normCDF(d2));
+    return (S * exp((b-r) * T) * norm_CDF(-d1)) - (K * exp(-r * T) * norm_CDF(d2));
 }
 
-double EuropeanOption::putPrice() const
+double EuropeanOption::PutPrice() const
 {
     // European put option price
     double tmp = sig * sqrt(T);
     double d1 = ( log(S/K) + (b + sig*sig)*.5 * T ) / tmp;
     double d2 = d1 - tmp;
 
-    return (K * exp(-r * T) * normCDF(-d2)) - (S * exp((b-r)*T) * normCDF(-d1));
+    return (K * exp(-r * T) * norm_CDF(-d2)) - (S * exp((b-r)*T) * norm_CDF(-d1));
 }
 
 double EuropeanOption::price() const
 {
-    if(type == 1) {
-        return callPrice();
+    if(type == "C") {
+        return CallPrice();
     }
     else{
-        return putPrice();
+        return PutPrice();
     }
 }
 
 void EuropeanOption::toggle()
 {
-    if(type == 1) {
-        type = 0;
+    if(type == "C") {
+        this->type = "P";
     }
     else {
-        type = 1;
+        this->type = "C";
     }
 }
