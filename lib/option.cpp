@@ -1,8 +1,10 @@
+/*
+ * option.cpp
+ */
+
 #include <cmath>
 #include <iostream>
-#include "EuropeanOption.hpp"
-
-using namespace std;
+#include "option.hpp"
 
 void EuropeanOption::set_params(double r, double sig, double K,  double T, double S, double b)
 {
@@ -13,6 +15,9 @@ void EuropeanOption::set_params(double r, double sig, double K,  double T, doubl
     this->T = T;
     this->S = S;
     this->b = b;
+
+    this->d1 = ( log(S/K) + (b + sig*sig*.5) * T ) / (sig * sqrt(T));
+    this->d2 = d1 - sig*sqrt(T);
 }
 
 double norm_CDF(double x)
@@ -24,20 +29,12 @@ double norm_CDF(double x)
 double EuropeanOption::CallPrice() const
 {
     // European call option price
-    double tmp = sig * sqrt(T);
-    double d1 = ( log(S/K) + (b + sig*sig)*.5 * T ) / tmp;
-    double d2 = d1 - tmp;
-
-    return (S * exp((b-r) * T) * norm_CDF(-d1)) - (K * exp(-r * T) * norm_CDF(d2));
+    return (S * exp((b-r) * T) * norm_CDF(d1)) - (K * exp(-r * T) * norm_CDF(d2));
 }
 
 double EuropeanOption::PutPrice() const
 {
     // European put option price
-    double tmp = sig * sqrt(T);
-    double d1 = ( log(S/K) + (b + sig*sig)*.5 * T ) / tmp;
-    double d2 = d1 - tmp;
-
     return (K * exp(-r * T) * norm_CDF(-d2)) - (S * exp((b-r)*T) * norm_CDF(-d1));
 }
 
