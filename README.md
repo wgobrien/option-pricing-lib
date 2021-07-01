@@ -16,7 +16,7 @@ You can price an option by declaring and initializing as follows:
 
 `EuropeanOption o = EuropeanOption("C")` makes a call option.
 
-Set the parameters using `set_params(interest_rate, volatility, strike_price, time_expire, underlying_asset_price, cost_carry)`
+Set the parameters using `o.set_params(interest_rate, volatility, strike_price, time_expire, underlying_asset_price, cost_carry)`
 
 Note: cost_carry = interest rate - dividend in this implementation.
 
